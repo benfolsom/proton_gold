@@ -16,20 +16,23 @@ my_constants.sigmay = 10*nano
 my_constants.sigmaz = 10*nano
 my_constants.beam_uth = 0.1/100.*beam_uz
 
+my_constants.proton_gamma = 4133.4163007
+my_constants.gold_gamma = 20.81799305
+
 # BOX
-my_constants.Lx = 0.3
-my_constants.Ly = 0.3
-my_constants.Lz = 0.3
+my_constants.Lx = 0.8
+my_constants.Ly = 0.8
+my_constants.Lz = 0.8
 
 # for a full scale simulation use: nx, ny, nz = 512, 512, 1024
-my_constants.nx = 64
-my_constants.ny = 64
+my_constants.nx = 56
+my_constants.ny = 56
 my_constants.nz = 128
 
 
 # TIME
-my_constants.T = 1e-14  #sigmaz/clight*1000000
-my_constants.dt = 1e-15 #sigmaz/clight*100000.
+my_constants.T = 2e-10  #sigmaz/clight*1000000
+my_constants.dt = 5.1e-12 #sigmaz/clight*100000.
 
 # DIAGS
 my_constants.every_red = 1.
@@ -44,8 +47,8 @@ amr.max_grid_size = 128
 amr.blocking_factor = 2
 amr.max_level = 0
 geometry.dims = 3
-geometry.prob_lo = -0.5*Lx -0.5*Ly -0.5*Lz
-geometry.prob_hi =  0.5*Lx  0.5*Ly  0.5*Lz
+geometry.prob_lo = -0.5*Lx -0.5*Ly -Lz
+geometry.prob_hi =  0.5*Lx  0.5*Ly Lz
 
 #################################
 ######## BOUNDARY CONDITION #####
@@ -59,13 +62,13 @@ boundary.particle_hi = Absorbing Absorbing Absorbing
 ############ NUMERICS ###########
 #################################
 warpx.poisson_solver = fft
-# warpx.do_electrostatic = relativistic
+#warpx.do_electrostatic = relativistic
 warpx.const_dt = dt
-warpx.grid_type = collocated
+# warpx.grid_type = collocated
 algo.particle_shape = 3
 algo.load_balance_intervals=100
-algo.particle_pusher = vay
-# algo.maxwell_solver = psatd #maybe try this or 'yee'
+algo.particle_pusher = vay # 'higuera' also valid for ultrarel.
+algo.maxwell_solver = psatd #maybe try this or 'yee'
 
 #################################
 ########### PARTICLES ###########
@@ -74,16 +77,20 @@ particles.species_names = beam1 beam2
 
 beam1.species_type = proton
 beam1.injection_style = SingleParticle
+
 beam1.single_particle_weight = 1
-beam1.single_particle_pos = 5.05e-8 5-05e-8 1.05e-12
-beam1.single_particle_u = 1e-3 1e-3 3197.3667743666842
-beam1.num_particles_per_cell_each_dim = 1 1 1
-beam1.xmin = -5.0e-8
-beam1.xmax = 5.1e-8
-beam1.ymin = -5.0e-8
-beam1.ymax = 5.1e-8
-beam1.zmin = -1.0e-12
-beam1.zmax = 1.1e-12
+beam1.charge = q_e*gold_gamma**2*proton_gamma
+beam1.single_particle_pos = 5.e-8 5e-8 1.05e-12
+beam1.single_particle_u = 1e-8 1e-8 proton_gamma
+# beam1.do_continuous_injection = 1
+# beam1.num_particles_per_cell = 1
+# beam1.num_particles_per_cell_each_dim = 1 1 1
+# beam1.xmin = -5.0e-8
+# beam1.xmax = 5.1e-8
+# beam1.ymin = -5.0e-8
+# beam1.ymax = 5.1e-8
+# beam1.zmin = -5.0e-8
+# beam1.zmax = 5.1e-8
 
 beam1.momentum_distribution_type = constant
 beam1.uz = beam_uz
@@ -93,23 +100,29 @@ beam1.ux_th = beam_uth
 beam1.uy_th = beam_uth
 beam1.uz_th = beam_uth
 beam1.initialize_self_fields = 1
-beam1.self_fields_required_precision = 5e-10
+beam1.self_fields_required_precision = 5e-11
 beam1.self_fields_max_iters = 10000
+# beam1.profile = constant
+# beam1.density = 1e18
 
 
 beam2.species_type = gold
-beam2.charge = q_e*79
+beam2.charge = q_e*79*proton_gamma**2*gold_gamma
 beam2.injection_style = SingleParticle
 beam2.single_particle_weight = 1
-beam2.single_particle_pos = -5.05e-8 -5-05e-8 0.1001
-beam2.single_particle_u = 1e-3 1e-3 -16.105899537789263
-beam2.num_particles_per_cell_each_dim = 1 1 1
-beam2.xmin = -5.1e-8
-beam2.xmax = 5.0e-8
-beam2.ymin = -5.1e-8
-beam2.ymax = 5.0e-8
-beam2.zmin = 0.1
-beam2.zmax = 0.11
+beam2.single_particle_pos = -5e-8 -5e-8 0.1001
+beam2.single_particle_u = 1e-8 1e-8 -gold_gamma
+
+# beam2.num_particles_per_cell = 1e6
+# beam2.num_particles_per_cell_each_dim = 1 1 1
+# beam2.xmin = -5.1e-8
+# beam2.xmax = -5.0e-8
+# beam2.ymin = -5.1e-8
+# beam2.ymax = -5.0e-8
+# beam2.zmin = 0.100000
+# beam2.zmax = 0.09999
+# beam2.profile = constant
+# beam2.density = 1e18
 
 beam2.momentum_distribution_type = constant
 beam2.uz = -beam_uz_gold
@@ -119,7 +132,7 @@ beam2.ux_th = beam_uth
 beam2.uy_th = beam_uth
 beam2.uz_th = beam_uth
 beam2.initialize_self_fields = 1
-beam2.self_fields_required_precision = 5e-10
+beam2.self_fields_required_precision = 5e-11
 beam2.self_fields_max_iters = 10000
 
 
@@ -138,11 +151,15 @@ diag1.dump_last_timestep = 1
 diag1.species = beam1 beam2
 
 # REDUCED
-warpx.reduced_diags_names = ParticleNumber BeamRelevant_beam1_beam2
+warpx.reduced_diags_names = ParticleNumber BeamRelevant_beam1 BeamRelevant_beam2
 
-BeamRelevant_beam1_beam2.type = BeamRelevant
-BeamRelevant_beam1_beam2.intervals = every_red
-BeamRelevant_beam1_beam2.species = beam1 # beam2
+BeamRelevant_beam1.type = BeamRelevant
+BeamRelevant_beam1.intervals = : # every_red
+BeamRelevant_beam1.species = beam1
+
+BeamRelevant_beam2.type = BeamRelevant
+BeamRelevant_beam2.intervals = : # every_red
+BeamRelevant_beam2.species = beam2
 
 ParticleNumber.type = ParticleNumber
-ParticleNumber.intervals = every_red
+ParticleNumber.intervals = : # every_red
