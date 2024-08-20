@@ -7,17 +7,23 @@ my_constants.nano = 1.0e-9
 my_constants.GeV = q_e*1.e9
 
 # BEAMS
-my_constants.beam_energy = 3000.*GeV
-my_constants.beam_uz = beam_energy/(mc2)
-my_constants.beam_uz_gold = beam_energy/(mc2_gold)
 
 my_constants.sigmax = 10*nano
 my_constants.sigmay = 10*nano
 my_constants.sigmaz = 10*nano
 my_constants.beam_uth = 0.1/100.*beam_uz
 
-my_constants.proton_gamma = 4133.4163007
-my_constants.gold_gamma = 20.81799305
+my_constants.proton_gamma = 3316.19106089
+my_constants.gold_gamma = 16.70332762
+
+# my_constants.beam_energy = 3000.*GeV #proton_gamma*0.938*GeV
+
+my_constants.proton_gammabeta = proton_gamma*(1-1/proton_gamma**2)**(0.5)
+my_constants.gold_gammabeta = gold_gamma*(1-1/gold_gamma**2)**(0.5)
+
+my_constants.beam_uz = proton_gammabeta #beam_energy/(mc2)
+my_constants.beam_uz_gold = gold_gammabeta #beam_energy/(mc2_gold)
+
 
 # BOX
 my_constants.Lx = 0.8
@@ -81,7 +87,7 @@ beam1.injection_style = SingleParticle
 beam1.single_particle_weight = 1
 beam1.charge = q_e*gold_gamma**2*proton_gamma
 beam1.single_particle_pos = 5.e-8 5e-8 1.05e-12
-beam1.single_particle_u = 1e-8 1e-8 proton_gamma
+beam1.single_particle_u = 1e-8 1e-8 proton_gammabeta
 # beam1.do_continuous_injection = 1
 # beam1.num_particles_per_cell = 1
 # beam1.num_particles_per_cell_each_dim = 1 1 1
@@ -111,7 +117,7 @@ beam2.charge = q_e*79*proton_gamma**2*gold_gamma
 beam2.injection_style = SingleParticle
 beam2.single_particle_weight = 1
 beam2.single_particle_pos = -5e-8 -5e-8 0.1001
-beam2.single_particle_u = 1e-8 1e-8 -gold_gamma
+beam2.single_particle_u = 1e-8 1e-8 -gold_gammabeta
 
 # beam2.num_particles_per_cell = 1e6
 # beam2.num_particles_per_cell_each_dim = 1 1 1
