@@ -13,16 +13,14 @@ my_constants.sigmay = 10*nano
 my_constants.sigmaz = 10*nano
 my_constants.beam_uth = 0.1/100.*beam_uz
 
-my_constants.proton_gamma = 3316.19106089
-my_constants.gold_gamma = 16.70332762
-
-# my_constants.beam_energy = 3000.*GeV #proton_gamma*0.938*GeV
+my_constants.proton_gamma = 319.69785055
+my_constants.gold_gamma = 1.61042343
 
 my_constants.proton_gammabeta = proton_gamma*(1-1/proton_gamma**2)**(0.5)
 my_constants.gold_gammabeta = gold_gamma*(1-1/gold_gamma**2)**(0.5)
 
-my_constants.beam_uz = proton_gammabeta #beam_energy/(mc2)
-my_constants.beam_uz_gold = gold_gammabeta #beam_energy/(mc2_gold)
+my_constants.beam_uz = proton_gammabeta
+my_constants.beam_uz_gold = gold_gammabeta
 
 
 # BOX
@@ -85,7 +83,7 @@ beam1.species_type = proton
 beam1.injection_style = SingleParticle
 
 beam1.single_particle_weight = 1
-beam1.charge = q_e*gold_gamma**2*proton_gamma
+beam1.charge = q_e*gold_gamma**2*proton_gamma*0.25
 beam1.single_particle_pos = 5.e-8 5e-8 1.05e-12
 beam1.single_particle_u = 1e-8 1e-8 proton_gammabeta
 # beam1.do_continuous_injection = 1
@@ -113,7 +111,7 @@ beam1.self_fields_max_iters = 10000
 
 
 beam2.species_type = gold
-beam2.charge = q_e*79*proton_gamma**2*gold_gamma
+beam2.charge = q_e*79*proton_gamma**2*gold_gamma*0.25
 beam2.injection_style = SingleParticle
 beam2.single_particle_weight = 1
 beam2.single_particle_pos = -5e-8 -5e-8 0.1001

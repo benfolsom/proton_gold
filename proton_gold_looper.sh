@@ -33,4 +33,6 @@ for i in "${!proton_gamma[@]}"; do
     
     # Copy the output files to the new directory
     cp ./diags/reducedfiles/* "$new_dir/"
+    cp ./proton_lead.inp "$new_dir/"
+    cp ./warpx_used_inputs "$new_dir/"
 done
